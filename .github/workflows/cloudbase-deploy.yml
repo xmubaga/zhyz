@@ -12,11 +12,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
       - name: Deploy to CloudBase
         uses: TencentCloudBase/cloudbase-action@v2
         with:
           secretId: ${{ secrets.CLOUDBASE_SECRET_ID }}
           secretKey: ${{ secrets.CLOUDBASE_SECRET_KEY }}
           envId: ${{ secrets.CLOUDBASE_ENV_ID }}
-          staticSrcPath: .
+          staticSrcPath: dist
           staticDestPath: /
