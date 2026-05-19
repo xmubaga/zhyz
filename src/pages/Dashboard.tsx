@@ -1,11 +1,12 @@
 import React from 'react';
 import { LayoutDashboard, TrendingUp, TrendingDown, Activity, Users, BarChart3, Bell } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const stats = [
     { label: '活跃指标', value: '156', trend: '+12%', trendUp: true, icon: Activity, color: 'blue' },
@@ -26,6 +27,8 @@ const Dashboard: React.FC = () => {
     navigate('/login');
   };
 
+  const isActive = (path: string) => location.pathname === path;
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex">
@@ -39,23 +42,43 @@ const Dashboard: React.FC = () => {
             </div>
 
             <nav className="space-y-2">
-              <a href="#" className="flex items-center space-x-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium">
+              <Link 
+                to="/dashboard" 
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                  isActive('/dashboard') ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
                 <LayoutDashboard className="w-5 h-5" />
                 <span>仪表盘</span>
-              </a>
-              <a href="#" className="flex items-center space-x-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+              </Link>
+              <Link 
+                to="/metrics" 
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive('/metrics') || location.pathname.startsWith('/metrics/') ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
                 <BarChart3 className="w-5 h-5" />
                 <span>指标管理</span>
-              </a>
-              <a href="#" className="flex items-center space-x-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+              </Link>
+              <Link 
+                to="/monitoring" 
+                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive('/monitoring') ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
                 <Activity className="w-5 h-5" />
                 <span>数据监控</span>
-              </a>
+              </Link>
               {user?.role === 'admin' && (
-                <a href="#" className="flex items-center space-x-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                <Link 
+                  to="/users" 
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
+                    isActive('/users') ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
                   <Users className="w-5 h-5" />
                   <span>用户管理</span>
-                </a>
+                </Link>
               )}
             </nav>
           </div>

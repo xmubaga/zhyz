@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useAuthStore } from "@/store/authStore";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
-import Metrics from "@/pages/Metrics";
+import { Metrics } from "@/pages/Metrics";
+import { MetricDetail } from "@/pages/MetricDetail";
 import Monitoring from "@/pages/Monitoring";
 import Users from "@/pages/Users";
 
@@ -27,6 +28,11 @@ export default function App() {
         <Route path="/metrics" element={
           <ProtectedRoute>
             <Metrics />
+          </ProtectedRoute>
+        } />
+        <Route path="/metrics/:id" element={
+          <ProtectedRoute>
+            <MetricDetail />
           </ProtectedRoute>
         } />
         <Route path="/monitoring" element={
